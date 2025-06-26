@@ -1,0 +1,17 @@
+{
+  "auth_params": {
+    "jwt_secret_key": "your-secret-key",
+    "jwt_ttl_minutes": 60
+  },
+  "app_params": {
+    "port_run": ":8080",
+    "server_name": "hotel-booking-server",
+    "gin_mode": "debug"
+  },
+  "postgres_params": {
+    "user": "postgres",
+    "host": "localhost",
+    "port": "5432",
+    "database": "hotel_booking_db"
+  }
+}
