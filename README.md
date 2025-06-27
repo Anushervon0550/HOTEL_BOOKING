@@ -85,7 +85,5 @@ POST /bookings
 }
 ```
 
-## Лицензия
 
-MIT
 
