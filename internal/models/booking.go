@@ -13,3 +13,10 @@ type Booking struct {
 	UpdatedAt time.Time  `json:"updated_at" db:"updated_at"`
 	DeletedAt *time.Time `json:"-" db:"deleted_at"`
 }
+
+// BookingRequest используется для создания бронирования через API
+type BookingRequest struct {
+	RoomID    int    `json:"room_id"`
+	StartDate string `json:"start_date"`
+	EndDate   string `json:"end_date"`
+}

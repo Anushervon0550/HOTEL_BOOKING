@@ -9,13 +9,20 @@ import (
 	"time"
 )
 
+// CreateBooking godoc
+// @Summary Создать бронирование
+// @Description Создает новое бронирование для пользователя
+// @Tags bookings
+// @Accept json
+// @Produce json
+// @Param booking body models.BookingRequest true "Данные для бронирования"
+// @Success 201 {object} map[string]string
+// @Failure 400 {object} map[string]string
+// @Failure 500 {object} map[string]string
+// @Security ApiKeyAuth
+// @Router /bookings [post]
 func CreateBooking(c *gin.Context) {
-	var input struct {
-		RoomID    int    `json:"room_id"`
-		StartDate string `json:"start_date"`
-		EndDate   string `json:"end_date"`
-	}
-
+	var input models.BookingRequest
 	if err := c.ShouldBindJSON(&input); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid request"})
 		return
@@ -55,6 +62,15 @@ func CreateBooking(c *gin.Context) {
 	c.JSON(http.StatusCreated, gin.H{"message": "booking created"})
 }
 
+// GetMyBookings godoc
+// @Summary Мои бронирования
+// @Description Получить список всех бронирований пользователя
+// @Tags bookings
+// @Produce json
+// @Success 200 {array} models.Booking
+// @Failure 500 {object} map[string]string
+// @Security ApiKeyAuth
+// @Router /bookings [get]
 func GetMyBookings(c *gin.Context) {
 	userID := c.GetInt("userID")
 
@@ -67,6 +83,17 @@ func GetMyBookings(c *gin.Context) {
 	c.JSON(http.StatusOK, bookings)
 }
 
+// CancelBooking godoc
+// @Summary Отмена бронирования
+// @Description Отменяет бронирование пользователя по ID
+// @Tags bookings
+// @Produce json
+// @Param id path int true "ID бронирования"
+// @Success 200 {object} map[string]string
+// @Failure 400 {object} map[string]string
+// @Failure 500 {object} map[string]string
+// @Security ApiKeyAuth
+// @Router /bookings/{id} [delete]
 func CancelBooking(c *gin.Context) {
 	userID := c.GetInt("userID")
 

@@ -6,6 +6,15 @@ import (
 	"net/http"
 )
 
+// GetMyProfile godoc
+// @Summary Получить профиль пользователя
+// @Description Возвращает информацию о текущем пользователе
+// @Tags user
+// @Produce json
+// @Success 200 {object} models.User
+// @Failure 404 {object} map[string]string
+// @Security ApiKeyAuth
+// @Router /profile [get]
 // GetMyProfile возвращает информацию о текущем пользователе
 func GetMyProfile(c *gin.Context) {
 	userID := c.GetInt("userID")

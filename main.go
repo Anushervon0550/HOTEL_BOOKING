@@ -3,11 +3,23 @@ package main
 import (
 	"fmt"
 	"github.com/gin-gonic/gin"
+	swaggerFiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
+	_ "hotel-booking/docs" // импортируем сгенерированные swagger docs
 	"hotel-booking/internal/configs"
 	"hotel-booking/internal/controller"
 	"hotel-booking/internal/db"
 	"hotel-booking/logger"
 )
+
+// @title Hotel Booking API
+// @version 1.0
+// @description API для бронирования отеля
+// @host localhost:8080
+// @BasePath /
+// @securityDefinitions.apikey ApiKeyAuth
+// @in header
+// @name Authorization
 
 func main() {
 	// Читаем конфигурацию
@@ -36,6 +48,9 @@ func main() {
 	gin.SetMode(configs.AppSettings.AppParams.GinMode)
 
 	r := gin.Default()
+
+	// Swagger роут
+	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	// Роуты аутентификации
 	r.POST("/auth/sign-up", controller.SignUp)

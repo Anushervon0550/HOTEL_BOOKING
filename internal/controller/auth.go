@@ -1,7 +1,7 @@
 package controller
 
 import (
-	"fmt" // 🔑 Добавь этот импорт
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"hotel-booking/internal/errs"
 	"hotel-booking/internal/models"
@@ -10,6 +10,18 @@ import (
 	"net/http"
 )
 
+// SignUp godoc
+// @Summary Регистрация пользователя
+// @Description Регистрирует нового пользователя
+// @Tags auth
+// @Accept json
+// @Produce json
+// @Param user body models.User true "Данные пользователя"
+// @Success 201 {object} map[string]string
+// @Failure 400 {object} map[string]string
+// @Failure 409 {object} map[string]string
+// @Failure 500 {object} map[string]string
+// @Router /auth/sign-up [post]
 func SignUp(c *gin.Context) {
 	var user models.User
 	if err := c.ShouldBindJSON(&user); err != nil {
@@ -29,6 +41,18 @@ func SignUp(c *gin.Context) {
 	c.JSON(http.StatusCreated, gin.H{"message": "user created"})
 }
 
+// SignIn godoc
+// @Summary Вход пользователя
+// @Description Аутентификация пользователя и выдача JWT
+// @Tags auth
+// @Accept json
+// @Produce json
+// @Param credentials body models.UserSignIn true "Данные для входа"
+// @Success 200 {object} map[string]string
+// @Failure 400 {object} map[string]string
+// @Failure 401 {object} map[string]string
+// @Failure 500 {object} map[string]string
+// @Router /auth/sign-in [post]
 func SignIn(c *gin.Context) {
 	var input models.UserSignIn
 	if err := c.ShouldBindJSON(&input); err != nil {
