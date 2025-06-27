@@ -56,3 +56,15 @@ func GetUserByUsernameAndPassword(username, password string) (models.User, error
 func GetUserByID(userID int) (models.User, error) {
 	return repository.GetUserByID(userID)
 }
+
+func GetAllUsers() ([]models.User, error) {
+	return repository.GetAllUsers()
+}
+
+func DeleteUser(id int) error {
+	return repository.DeleteUser(id)
+}
+
+func UpdateUserRole(id int, role string) error {
+	return repository.UpdateUserRole(id, role)
+}

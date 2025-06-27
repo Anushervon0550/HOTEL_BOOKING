@@ -23,6 +23,13 @@ func GetBookingsByUserID(userID int) ([]models.Booking, error) {
 	return bookings, err
 }
 
+// Получить все бронирования (для manager/admin)
+func GetAllBookings() ([]models.Booking, error) {
+	var bookings []models.Booking
+	err := db.GetDBConn().Select(&bookings, `SELECT * FROM bookings WHERE deleted_at IS NULL ORDER BY start_date`)
+	return bookings, err
+}
+
 // Проверка конфликта бронирования
 func CheckBookingConflict(roomID int, startDate, endDate time.Time) (bool, error) {
 	var count int

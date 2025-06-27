@@ -29,6 +29,7 @@ func SignUp(c *gin.Context) {
 		return
 	}
 
+	user.Role = "user" // по умолчанию роль user
 	if err := service.CreateUser(user); err != nil {
 		if err == errs.ErrUserAlreadyExists {
 			c.JSON(http.StatusConflict, gin.H{"error": err.Error()})
@@ -73,7 +74,7 @@ func SignIn(c *gin.Context) {
 		return
 	}
 
-	token, err := utils.GenerateToken(user.ID, user.Username)
+	token, err := utils.GenerateToken(user.ID, user.Username, user.Role)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to generate token"})
 		return

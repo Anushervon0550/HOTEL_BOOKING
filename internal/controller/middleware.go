@@ -1,10 +1,11 @@
 package controller
 
 import (
-	"github.com/gin-gonic/gin"
-	"hotel-booking/internal/utils"
 	"net/http"
 	"strings"
+
+	"github.com/gin-gonic/gin"
+	"hotel-booking/internal/utils"
 )
 
 func AuthMiddleware() gin.HandlerFunc {
@@ -33,6 +34,35 @@ func AuthMiddleware() gin.HandlerFunc {
 		}
 
 		c.Set("userID", claims.UserID)
+		c.Set("role", claims.Role) // сохраняем роль в context
+		c.Next()
+	}
+}
+
+// RequireRoles проверяет, что роль пользователя входит в разрешённые
+func RequireRoles(roles ...string) gin.HandlerFunc {
+	return func(c *gin.Context) {
+		roleVal, exists := c.Get("role")
+		if !exists {
+			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "role not found in context"})
+			return
+		}
+		role, ok := roleVal.(string)
+		if !ok {
+			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "invalid role type"})
+			return
+		}
+		allowed := false
+		for _, r := range roles {
+			if role == r {
+				allowed = true
+				break
+			}
+		}
+		if !allowed {
+			c.AbortWithStatusJSON(http.StatusForbidden, gin.H{"error": "forbidden: insufficient role"})
+			return
+		}
 		c.Next()
 	}
 }

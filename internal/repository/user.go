@@ -41,3 +41,33 @@ func GetUserByID(userID int) (models.User, error) {
 	}
 	return u, nil
 }
+
+func GetAllUsers() ([]models.User, error) {
+	var users []models.User
+	err := db.GetDBConn().Select(&users, `SELECT * FROM users WHERE deleted_at IS NULL`)
+	return users, err
+}
+
+func DeleteUser(id int) error {
+	res, err := db.GetDBConn().Exec(`UPDATE users SET deleted_at=NOW() WHERE id=$1 AND deleted_at IS NULL`, id)
+	if err != nil {
+		return err
+	}
+	rows, _ := res.RowsAffected()
+	if rows == 0 {
+		return errs.ErrNotFound
+	}
+	return nil
+}
+
+func UpdateUserRole(id int, role string) error {
+	res, err := db.GetDBConn().Exec(`UPDATE users SET role=$1, updated_at=NOW() WHERE id=$2 AND deleted_at IS NULL`, role, id)
+	if err != nil {
+		return err
+	}
+	rows, _ := res.RowsAffected()
+	if rows == 0 {
+		return errs.ErrNotFound
+	}
+	return nil
+}

@@ -111,3 +111,21 @@ func CancelBooking(c *gin.Context) {
 
 	c.JSON(http.StatusOK, gin.H{"message": "booking cancelled"})
 }
+
+// GetAllBookings godoc
+// @Summary Получить все бронирования
+// @Description Доступно только для manager и admin
+// @Tags admin
+// @Produce json
+// @Success 200 {array} models.Booking
+// @Failure 403 {object} map[string]string
+// @Security ApiKeyAuth
+// @Router /bookings/all [get]
+func GetAllBookings(c *gin.Context) {
+	bookings, err := service.GetAllBookings()
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, bookings)
+}

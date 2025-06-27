@@ -33,3 +33,7 @@ func GetBookingsByUserID(userID int) ([]models.Booking, error) {
 func CancelBooking(bookingID, userID int) error {
 	return repository.CancelBooking(bookingID, userID)
 }
+
+func GetAllBookings() ([]models.Booking, error) {
+	return repository.GetAllBookings()
+}

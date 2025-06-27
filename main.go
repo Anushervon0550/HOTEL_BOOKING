@@ -63,12 +63,22 @@ func main() {
 	// Роуты комнат
 	auth.GET("/rooms", controller.GetAllRooms)
 	auth.GET("/rooms/:id", controller.GetRoomByID)
+	// Только для manager и admin
+	auth.POST("/rooms", controller.RequireRoles("admin", "manager"), controller.CreateRoom)
+	auth.PUT("/rooms/:id", controller.RequireRoles("admin", "manager"), controller.UpdateRoom)
+	auth.DELETE("/rooms/:id", controller.RequireRoles("admin", "manager"), controller.DeleteRoom)
 	auth.GET("/profile", controller.GetMyProfile)
 
 	// Роуты бронирования
 	auth.POST("/bookings", controller.CreateBooking)
 	auth.GET("/bookings", controller.GetMyBookings)
 	auth.DELETE("/bookings/:id", controller.CancelBooking)
+	auth.GET("/bookings/all", controller.RequireRoles("admin", "manager"), controller.GetAllBookings)
+
+	// Роуты управления пользователями (только для admin)
+	auth.GET("/users", controller.RequireRoles("admin"), controller.GetAllUsers)
+	auth.DELETE("/users/:id", controller.RequireRoles("admin"), controller.DeleteUser)
+	auth.PUT("/users/:id/role", controller.RequireRoles("admin"), controller.UpdateUserRole)
 
 	port := configs.AppSettings.AppParams.PortRun
 	logger.Info.Println("Starting server on port", port)

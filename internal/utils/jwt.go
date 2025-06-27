@@ -11,13 +11,15 @@ import (
 type CustomClaims struct {
 	UserID   int    `json:"user_id"`
 	Username string `json:"username"`
+	Role     string `json:"role"`
 	jwt.StandardClaims
 }
 
-func GenerateToken(userID int, username string) (string, error) {
+func GenerateToken(userID int, username string, role string) (string, error) {
 	claims := CustomClaims{
 		UserID:   userID,
 		Username: username,
+		Role:     role,
 		StandardClaims: jwt.StandardClaims{
 			ExpiresAt: time.Now().Add(time.Duration(configs.AppSettings.AuthParams.JwtTtlMinutes) * time.Minute).Unix(),
 			Issuer:    configs.AppSettings.AppParams.ServerName,
